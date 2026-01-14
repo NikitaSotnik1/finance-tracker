@@ -1,142 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💰 Финансовый Учет</title>
-    
-    <!-- PWA метатеги -->
-    <meta name="theme-color" content="#4CAF50">
-    <meta name="description" content="Приложение для учета доходов и расходов">
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Иконки -->
-    <link rel="icon" href="icons/icon-192.png" type="image/png">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    
-    <!-- Стили -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Tracker</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="app-container">
-        <!-- Шапка -->
-        <header class="app-header">
-            <h1><span class="material-icons">account_balance_wallet</span> Финансовый Учет</h1>
-            <button class="btn-icon" id="btnStats">
-                <span class="material-icons">analytics</span>
-            </button>
-        </header>
 
-        <!-- Карточка баланса -->
-        <div class="balance-card">
-            <div class="balance-title">Ваш баланс</div>
-            <div class="balance-amount" id="totalBalance">0 ₽</div>
-            
-            <div class="balance-stats">
-                <div class="stat income">
-                    <div class="stat-label">Доходы</div>
-                    <div class="stat-amount" id="totalIncome">+0 ₽</div>
-                </div>
-                <div class="stat expense">
-                    <div class="stat-label">Расходы</div>
-                    <div class="stat-amount" id="totalExpense">-0 ₽</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Форма добавления -->
-        <div class="add-form">
-            <div class="form-row">
-                <input type="number" id="inputAmount" placeholder="Сумма" step="0.01" min="0">
-                <select id="selectType">
-                    <option value="expense">📉 Расход</option>
-                    <option value="income">📈 Доход</option>
-                </select>
-            </div>
-            
-            <div class="form-row">
-                <select id="selectCategory">
-                    <option value="">Выберите категорию</option>
-                    <optgroup label="Расходы">
-                        <option value="Еда">🍕 Еда</option>
-                        <option value="Транспорт">🚗 Транспорт</option>
-                        <option value="Развлечения">🎬 Развлечения</option>
-                        <option value="Жилье">🏠 Жилье</option>
-                        <option value="Одежда">👕 Одежда</option>
-                    </optgroup>
-                    <optgroup label="Доходы">
-                        <option value="Зарплата">💼 Зарплата</option>
-                        <option value="Фриланс">💻 Фриланс</option>
-                        <option value="Инвестиции">📈 Инвестиции</option>
-                        <option value="Подарок">🎁 Подарок</option>
-                    </optgroup>
-                </select>
-            </div>
-            
-            <div class="form-row">
-                <input type="text" id="inputNote" placeholder="Примечание (необязательно)">
-            </div>
-            
-            <div class="form-row">
-                <input type="date" id="inputDate" value="">
-            </div>
-            
-            <button class="btn-primary" id="btnAdd">
-                <span class="material-icons">add</span> Добавить операцию
-            </button>
-        </div>
-
-        <!-- Фильтры -->
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">Все</button>
-            <button class="filter-btn" data-filter="income">Доходы</button>
-            <button class="filter-btn" data-filter="expense">Расходы</button>
-        </div>
-
-        <!-- Список операций -->
-        <div class="transactions-container">
-            <h3>История операций</h3>
-            <div id="transactionsList">
-                <!-- Сюда будут добавляться операции -->
-                <div class="empty-state">
-                    <span class="material-icons">receipt_long</span>
-                    <p>Операций пока нет</p>
-                    <p>Добавьте первую операцию!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Модальное окно статистики -->
-        <div class="modal" id="statsModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>📊 Статистика</h2>
-                    <button class="btn-close" id="btnCloseStats">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="chart-placeholder" id="chartContainer">
-                        <p>График будет здесь</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <header class="header">
+    <h1>Finance</h1>
+    <div class="balance">
+      <span class="balance-label">Баланс</span>
+      <span id="balance" class="balance-value">0 ₽</span>
     </div>
+  </header>
 
-    <!-- Скрипты -->
-    <script src="app.js"></script>
-    
-    <!-- Инициализация Service Worker для PWA -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('Service Worker зарегистрирован'))
-                    .catch(err => console.log('Ошибка SW:', err));
-            });
-        }
-    </script>
+  <main class="container">
+
+    <section class="add-transaction">
+      <input type="text" id="description" placeholder="Описание" />
+      <input type="number" id="amount" placeholder="Сумма" />
+      <select id="type">
+        <option value="income">Доход</option>
+        <option value="expense">Расход</option>
+      </select>
+      <button id="addBtn">Добавить</button>
+    </section>
+
+    <section class="transactions">
+      <h2>Операции</h2>
+      <ul id="transactionList" class="transaction-list"></ul>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
