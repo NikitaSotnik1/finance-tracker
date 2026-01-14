@@ -7,6 +7,54 @@ class FinanceTracker {
         this.initEvents();
         this.setDefaultDate();
         this.render();
+
+        showMessage(text, type = 'info') {
+    // Удаляем старое сообщение
+    const oldMsg = document.querySelector('.chatgpt-toast');
+    if (oldMsg) oldMsg.remove();
+    
+    // Создаем новое
+    const toast = document.createElement('div');
+    toast.className = `chatgpt-toast ${type}`;
+    toast.innerHTML = `
+        <span class="material-icons">
+            ${type === 'success' ? 'check_circle' : 
+              type === 'error' ? 'error' : 'info'}
+        </span>
+        <span>${text}</span>
+    `;
+    
+    // Стили прямо в JS для простоты
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 12px 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: toastIn 0.3s ease forwards;
+    `;
+    
+    // Добавляем в DOM
+    document.body.appendChild(toast);
+    
+    // Анимация появления
+    setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+        
     }
 
     initElements() {
@@ -340,7 +388,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         
         financeTracker.transactions = testTransactions;
+
+        const style = document.createElement('style');
+style.textContent = `
+    @keyframes toastIn {
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    }
+    @keyframes toastOut {
+        from { transform: translateX(-50%) translateY(0); opacity: 1; }
+        to { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    }
+    .chatgpt-toast.success .material-icons { color: var(--accent-green); }
+    .chatgpt-toast.error .material-icons { color: var(--accent-red); }
+    .chatgpt-toast.info .material-icons { color: var(--accent-blue); }
+`;
+document.head.appendChild(style);
         financeTracker.saveToLocalStorage();
         financeTracker.render();
     }
+
 });
