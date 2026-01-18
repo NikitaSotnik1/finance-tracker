@@ -22,6 +22,7 @@ class FinanceTracker {
     this.amountInput = document.getElementById("amount");
     this.typeSelect = document.getElementById("type");
     this.addBtn = document.getElementById("addBtn");
+    this.categorySelect = document.getElementById("category");
 
     this.transactionList = document.getElementById("transactionList");
     this.balanceEl = document.getElementById("balance");
@@ -31,22 +32,37 @@ class FinanceTracker {
     this.addBtn.addEventListener("click", () => this.addTransaction());
   }
 
+  renderCategories() {
+  this.categorySelect.innerHTML = "";
+
+  this.categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    this.categorySelect.appendChild(option);
+  });
+}
+
+
   addTransaction() {
     const description = this.descriptionInput.value.trim();
     const amount = parseFloat(this.amountInput.value);
     const type = this.typeSelect.value;
+    const category = this.categorySelect.value;
 
     if (!description || isNaN(amount) || amount <= 0) {
       return;
     }
 
     const transaction = {
-      id: Date.now(),
-      description,
-      amount,
-      type,
-      date: new Date().toISOString()
-    };
+  id: Date.now(),
+  description: description || "Без описания",
+  amount,
+  type,
+  category,
+  date: new Date().toISOString()
+};
+
 
     this.transactions.push(transaction);
     this.save();
@@ -61,8 +77,10 @@ class FinanceTracker {
   }
 
   save() {
-    localStorage.setItem("transactions", JSON.stringify(this.transactions));
-  }
+  localStorage.setItem("transactions", JSON.stringify(this.transactions));
+  localStorage.setItem("categories", JSON.stringify(this.categories));
+}
+
 
   calculateBalance() {
     return this.transactions.reduce((total, t) => {
@@ -88,8 +106,9 @@ class FinanceTracker {
         <div class="transaction-info">
           <span class="transaction-desc">${t.description}</span>
           <span class="transaction-type">
-            ${t.type === "income" ? "Доход" : "Расход"}
-          </span>
+  ${t.type === "income" ? "Доход" : "Расход"} · ${t.category}
+</span>
+
         </div>
         <span class="transaction-amount ${t.type}">
           ${t.type === "income" ? "+" : "-"}${t.amount} ₽
@@ -101,13 +120,16 @@ class FinanceTracker {
   }
 
   render() {
-    this.renderBalance();
-    this.renderTransactions();
-  }
+  this.renderCategories();
+  this.renderBalance();
+  this.renderTransactions();
+}
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   new FinanceTracker();
 });
+
 
 
