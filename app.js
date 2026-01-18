@@ -1,6 +1,12 @@
 class FinanceTracker {
   constructor() {
     this.transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+    this.categories =
+  JSON.parse(localStorage.getItem("categories")) ||
+  ["Еда", "Транспорт", "Дом", "Развлечения", "Прочее"];
+
+    
     this.categories =
   JSON.parse(localStorage.getItem("categories")) ||
   ["Еда", "Транспорт", "Дом", "Развлечения", "Прочее"];
@@ -103,4 +109,5 @@ class FinanceTracker {
 document.addEventListener("DOMContentLoaded", () => {
   new FinanceTracker();
 });
+
 
